@@ -1,0 +1,34 @@
+# render.yaml — customize names/region/plan as needed
+services:
+  - type: web
+    name: slack-ai-agent
+    env: node
+    plan: starter
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SLACK_BOT_TOKEN
+        sync: false
+      - key: SLACK_APP_TOKEN
+        sync: false
+      - key: SLACK_SIGNING_SECRET
+        sync: false
+      - key: SLACK_PRIVATE_CHANNEL_ID
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: COMPANY_NAME
+        value: YOUR COMPANY NAME
+       
+      - key: DATABASE_URL
+        fromDatabase:
+          name: slack-ai-agent-db
+          property: connectionString
+databases:
+  - name: slack-ai-agent-db
+    engine: postgres
+    version: "14"
+    plan: free
+    
