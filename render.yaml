@@ -25,10 +25,4 @@ services:
       - key: DATABASE_URL
         fromDatabase:
           name: slack-ai-agent-db
-          property: connectionString
-databases:
-  - name: slack-ai-agent-db
-    engine: postgres
-    version: "14"
-    plan: free
     
