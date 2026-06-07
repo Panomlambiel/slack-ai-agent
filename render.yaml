@@ -16,11 +16,26 @@ services:
       - key: DATABASE_URL
         fromDatabase:
           name: slack-ai-agent-db
+          property: connectionString
+      - key: STRIPE_API_KEY
+        sync: false
+
+  - type: cron
+    name: nightly-task
+    schedule: "0 2 * * *"
+    command: "node scripts/nightly.js"
+
+  - type: worker
+    name: slack-ai-worker
+    env: node
+    plan: starter
+    buildCommand: npm ci
+    startCommand: node worker.js
+    healthCheckPath: /healthz
 
 databases:
   - name: slack-ai-agent-db
-    engine: postgres
-    version: "15"
+    postgresMajorVersion: "15"
     plan: starter
 
 # Optional: add cron jobs, static sites, or additional services below
