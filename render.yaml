@@ -1,29 +1,31 @@
-# render.yaml — customize names/region/plan as needed
+# Render.com manifest for deploying the Node.js app in this repository
+# Adjust branch, env vars, and plans as needed before applying
+
 services:
   - type: web
     name: slack-ai-agent
     env: node
-    plan: starter
-    buildCommand: "npm install"
-    startCommand: "npm start"
+    plan: free
+    branch: main
+    buildCommand: npm ci
+    startCommand: node index.js
+    healthCheckPath: /
     envVars:
       - key: NODE_ENV
         value: production
-      - key: SLACK_BOT_TOKEN
-        sync: false
-      - key: SLACK_APP_TOKEN
-        sync: false
-      - key: SLACK_SIGNING_SECRET
-        sync: false
-      - key: SLACK_PRIVATE_CHANNEL_ID
-        sync: false
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: COMPANY_NAME
-        value: Your company name
       - key: DATABASE_URL
-        sync: false
-      - key: COMPANY_PRODUCT
-        value: Your Comercial Product
-      
-    
+        fromDatabase:
+          name: slack-ai-agent-db
+
+databases:
+  - name: slack-ai-agent-db
+    engine: postgres
+    version: "15"
+    plan: starter
+
+# Optional: add cron jobs, static sites, or additional services below
+# Example cron (uncomment and customize if needed):
+# cron:
+#   - name: nightly-task
+#     schedule: "0 2 * * *"
+#     command: "node scripts/nightly.js"
